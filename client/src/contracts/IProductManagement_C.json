@@ -74,7 +74,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_productId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_new\",\"type\":\"address\"}],\"name\":\"changeProductOwner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_productId\",\"type\":\"uint256\"}],\"name\":\"getProductData\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_size\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_origin\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_price\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_owner\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"year\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"month\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"date\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/consumer.sol\":\"IProductManagement_C\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/consumer.sol\":{\"keccak256\":\"0x2228860b33fb41e6b83e84b4c9871ac8220e8bb1b5e9a0826b940121702a305b\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://0f980406f18aa4f56f77d4f21c23eb1175e12b48d253bf8b0853f04c1271b8df\",\"dweb:/ipfs/Qmdz2FjwBXBApE41ZVpUJhj6unNHo1qh1wVWcUVdjbru6m\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_productId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_new\",\"type\":\"address\"}],\"name\":\"changeProductOwner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_productId\",\"type\":\"uint256\"}],\"name\":\"getProductData\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_size\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_origin\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_price\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_owner\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"year\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"month\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"date\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/consumer.sol\":\"IProductManagement_C\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/consumer.sol\":{\"keccak256\":\"0x56d97d9ee842ac6675e10b47a596578deb8db48fb8ccb72909152ec0db83bd5b\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://3d8a23cbd23283f7e4f1c74f7ff528f64217e89bd712fd685916cca6eb4917c2\",\"dweb:/ipfs/QmT2KiqxUZT5E6EM4KgMEMbsG9AwrMksEzxNoBmbA3A3RE\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -82,19 +82,19 @@
   "deployedGeneratedSources": [],
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.13;\r\n\r\ninterface IProductManagement_C {\r\n    function getProductData(uint _productId) external view returns (string memory _name, string memory _size, string memory _origin, uint _price, address payable _owner, uint year, uint month, uint date);\r\n    function changeProductOwner(uint _productId, address _new) external;\r\n}\r\n\r\ncontract Consumer {\r\n\r\n    IProductManagement_C productManageContract;\r\n\r\n    mapping (address => bool) public isConsumer;\r\n    mapping (address => uint) private balance; // id => balance mapping to keep track of each consumer topped up balance\r\n\r\n    constructor (address _productManageAddress) {\r\n        productManageContract = IProductManagement_C(_productManageAddress);\r\n    }\r\n\r\n    fallback() external payable {\r\n\r\n    }\r\n\r\n    receive() external payable { \r\n        \r\n    }\r\n\r\n    modifier onlyConsumer(address _addr) {\r\n        require(isConsumer[_addr]);\r\n        _;\r\n    }\r\n\r\n    function registerConsumer(address _addr) public {\r\n        isConsumer[_addr] = true;\r\n    }\r\n\r\n    function topUp (address _addr) public payable onlyConsumer(_addr) {\r\n        require(msg.value > 0 ether);\r\n        (bool sent,) = payable(address(this)).call{value: msg.value}(\"\");\r\n        require(sent, \"Fail to top up amount.\");\r\n\r\n        balance[_addr] += msg.value;\r\n    }\r\n\r\n    function checkBalance (address _addr) public view onlyConsumer(_addr) returns (uint) {\r\n        return balance[_addr];\r\n    }\r\n\r\n    function buyFromSeller (address _addr, uint _productId) public payable onlyConsumer(_addr) {\r\n        uint price;\r\n        address payable _to; // product owner that we want to pay eth to\r\n\r\n        (,,, price, _to,,,) = productManageContract.getProductData(_productId);\r\n        \r\n        require(balance[_addr] >= price, \"Balance not enough\");\r\n\r\n        (bool sent, ) = _to.call{value: price * 10**18}(\"\");\r\n        require(sent, \"Failed to send Ether\");\r\n\r\n        balance[_addr] -= price;\r\n        productManageContract.changeProductOwner(_productId, _addr);\r\n    }\r\n    \r\n}",
-  "sourcePath": "C:\\Users\\User\\Desktop\\fake-product-blockchain\\contracts\\consumer.sol",
+  "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.13;\r\n\r\ninterface IProductManagement_C {\r\n    function getProductData(uint _productId) external view returns (string memory _name, string memory _size, string memory _origin, uint _price, address payable _owner, uint year, uint month, uint date);\r\n    function changeProductOwner(uint _productId, address _new) external;\r\n}\r\n\r\ncontract Consumer {\r\n\r\n    IProductManagement_C productManageContract;\r\n\r\n    mapping (address => bool) public isConsumer;\r\n    mapping (address => uint) private balance; // id => balance mapping to keep track of each consumer topped up balance\r\n\r\n    constructor (address _productManageAddress) {\r\n        productManageContract = IProductManagement_C(_productManageAddress);\r\n    }\r\n\r\n    fallback() external payable {\r\n\r\n    }\r\n\r\n    receive() external payable { \r\n        \r\n    }\r\n\r\n    modifier onlyConsumer(address _addr) {\r\n        require(isConsumer[_addr]);\r\n        _;\r\n    }\r\n\r\n    function registerConsumer(address _addr) public {\r\n        isConsumer[_addr] = true;\r\n    }\r\n\r\n    function topUp (address _addr) public payable onlyConsumer(_addr) {\r\n        require(msg.value > 0 ether);\r\n        (bool sent,) = payable(address(this)).call{value: msg.value}(\"\");\r\n        require(sent, \"Fail to top up amount.\");\r\n\r\n        balance[_addr] += msg.value;\r\n    }\r\n\r\n    function checkBalance (address _addr) public view onlyConsumer(_addr) returns (uint) {\r\n        return balance[_addr];\r\n    }\r\n\r\n    function buyFromSeller (address _addr, uint _productId) public payable onlyConsumer(_addr) {\r\n        uint price;\r\n        address payable _to; // product owner that we want to pay eth to\r\n\r\n        (,,, price, _to,,,) = productManageContract.getProductData(_productId);\r\n        \r\n        require(balance[_addr] >= price, \"Balance not enough\");\r\n\r\n        (bool sent, ) = _to.call{value: price * 10**18}(\"\");\r\n        require(sent, \"Failed to send Ether\");\r\n\r\n        balance[_addr] -= price * 10**18;\r\n        productManageContract.changeProductOwner(_productId, _addr);\r\n    }\r\n    \r\n}",
+  "sourcePath": "C:\\Users\\User\\Desktop\\fake-product-blockchain - Copy\\contracts\\consumer.sol",
   "ast": {
     "absolutePath": "project:/contracts/consumer.sol",
     "exportedSymbols": {
       "Consumer": [
-        3401
+        3405
       ],
       "IProductManagement_C": [
         3220
       ]
     },
-    "id": 3402,
+    "id": 3406,
     "license": "GPL-3.0",
     "nodeType": "SourceUnit",
     "nodes": [
@@ -481,7 +481,7 @@
             "visibility": "external"
           }
         ],
-        "scope": 3402,
+        "scope": 3406,
         "src": "65:315:6",
         "usedErrors": []
       },
@@ -492,9 +492,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 3401,
+        "id": 3405,
         "linearizedBaseContracts": [
-          3401
+          3405
         ],
         "name": "Consumer",
         "nameLocation": "393:8:6",
@@ -507,7 +507,7 @@
             "name": "productManageContract",
             "nameLocation": "432:21:6",
             "nodeType": "VariableDeclaration",
-            "scope": 3401,
+            "scope": 3405,
             "src": "411:42:6",
             "stateVariable": true,
             "storageLocation": "default",
@@ -542,7 +542,7 @@
             "name": "isConsumer",
             "nameLocation": "495:10:6",
             "nodeType": "VariableDeclaration",
-            "scope": 3401,
+            "scope": 3405,
             "src": "462:43:6",
             "stateVariable": true,
             "storageLocation": "default",
@@ -588,7 +588,7 @@
             "name": "balance",
             "nameLocation": "546:7:6",
             "nodeType": "VariableDeclaration",
-            "scope": 3401,
+            "scope": 3405,
             "src": "512:41:6",
             "stateVariable": true,
             "storageLocation": "default",
@@ -762,7 +762,7 @@
               "parameters": [],
               "src": "680:0:6"
             },
-            "scope": 3401,
+            "scope": 3405,
             "src": "636:130:6",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -794,7 +794,7 @@
               "parameters": [],
               "src": "802:0:6"
             },
-            "scope": 3401,
+            "scope": 3405,
             "src": "774:38:6",
             "stateMutability": "payable",
             "virtual": false,
@@ -826,7 +826,7 @@
               "parameters": [],
               "src": "847:0:6"
             },
-            "scope": 3401,
+            "scope": 3405,
             "src": "820:46:6",
             "stateMutability": "payable",
             "virtual": false,
@@ -1098,7 +1098,7 @@
               "parameters": [],
               "src": "1024:0:6"
             },
-            "scope": 3401,
+            "scope": 3405,
             "src": "976:91:6",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -1296,7 +1296,7 @@
                                   "referencedDeclaration": 4294967268,
                                   "src": "1222:4:6",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_contract$_Consumer_$3401",
+                                    "typeIdentifier": "t_contract$_Consumer_$3405",
                                     "typeString": "contract Consumer"
                                   }
                                 }
@@ -1304,7 +1304,7 @@
                               "expression": {
                                 "argumentTypes": [
                                   {
-                                    "typeIdentifier": "t_contract$_Consumer_$3401",
+                                    "typeIdentifier": "t_contract$_Consumer_$3405",
                                     "typeString": "contract Consumer"
                                   }
                                 ],
@@ -1696,7 +1696,7 @@
               "parameters": [],
               "src": "1141:0:6"
             },
-            "scope": 3401,
+            "scope": 3405,
             "src": "1075:278:6",
             "stateMutability": "payable",
             "virtual": false,
@@ -1858,7 +1858,7 @@
               ],
               "src": "1439:6:6"
             },
-            "scope": 3401,
+            "scope": 3405,
             "src": "1361:125:6",
             "stateMutability": "view",
             "virtual": false,
@@ -1866,9 +1866,9 @@
           },
           {
             "body": {
-              "id": 3399,
+              "id": 3403,
               "nodeType": "Block",
-              "src": "1585:479:6",
+              "src": "1585:488:6",
               "statements": [
                 {
                   "assignments": [
@@ -1882,7 +1882,7 @@
                       "name": "price",
                       "nameLocation": "1601:5:6",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3399,
+                      "scope": 3403,
                       "src": "1596:10:6",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -1919,7 +1919,7 @@
                       "name": "_to",
                       "nameLocation": "1633:3:6",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3399,
+                      "scope": 3403,
                       "src": "1617:19:6",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2217,7 +2217,7 @@
                       "name": "sent",
                       "nameLocation": "1857:4:6",
                       "nodeType": "VariableDeclaration",
-                      "scope": 3399,
+                      "scope": 3403,
                       "src": "1852:9:6",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2491,7 +2491,7 @@
                 },
                 {
                   "expression": {
-                    "id": 3390,
+                    "id": 3394,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2536,49 +2536,117 @@
                     "nodeType": "Assignment",
                     "operator": "-=",
                     "rightHandSide": {
-                      "id": 3389,
-                      "name": "price",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 3345,
-                      "src": "1981:5:6",
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 3393,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "id": 3389,
+                        "name": "price",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3345,
+                        "src": "1981:5:6",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": "*",
+                      "rightExpression": {
+                        "commonType": {
+                          "typeIdentifier": "t_rational_1000000000000000000_by_1",
+                          "typeString": "int_const 1000000000000000000"
+                        },
+                        "id": 3392,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "hexValue": "3130",
+                          "id": 3390,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1989:2:6",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_10_by_1",
+                            "typeString": "int_const 10"
+                          },
+                          "value": "10"
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "**",
+                        "rightExpression": {
+                          "hexValue": "3138",
+                          "id": 3391,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "1993:2:6",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_18_by_1",
+                            "typeString": "int_const 18"
+                          },
+                          "value": "18"
+                        },
+                        "src": "1989:6:6",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_rational_1000000000000000000_by_1",
+                          "typeString": "int_const 1000000000000000000"
+                        }
+                      },
+                      "src": "1981:14:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1963:23:6",
+                    "src": "1963:32:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 3391,
+                  "id": 3395,
                   "nodeType": "ExpressionStatement",
-                  "src": "1963:23:6"
+                  "src": "1963:32:6"
                 },
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 3395,
+                        "id": 3399,
                         "name": "_productId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 3338,
-                        "src": "2038:10:6",
+                        "src": "2047:10:6",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
                       {
-                        "id": 3396,
+                        "id": 3400,
                         "name": "_addr",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 3336,
-                        "src": "2050:5:6",
+                        "src": "2059:5:6",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2597,18 +2665,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 3392,
+                        "id": 3396,
                         "name": "productManageContract",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 3223,
-                        "src": "1997:21:6",
+                        "src": "2006:21:6",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_IProductManagement_C_$3220",
                           "typeString": "contract IProductManagement_C"
                         }
                       },
-                      "id": 3394,
+                      "id": 3398,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2616,13 +2684,13 @@
                       "memberName": "changeProductOwner",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 3219,
-                      "src": "1997:40:6",
+                      "src": "2006:40:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_uint256_$_t_address_$returns$__$",
                         "typeString": "function (uint256,address) external"
                       }
                     },
-                    "id": 3397,
+                    "id": 3401,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2630,21 +2698,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1997:59:6",
+                    "src": "2006:59:6",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3398,
+                  "id": 3402,
                   "nodeType": "ExpressionStatement",
-                  "src": "1997:59:6"
+                  "src": "2006:59:6"
                 }
               ]
             },
             "functionSelector": "b528cd99",
-            "id": 3400,
+            "id": 3404,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -2690,7 +2758,7 @@
                   "name": "_addr",
                   "nameLocation": "1526:5:6",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3400,
+                  "scope": 3404,
                   "src": "1518:13:6",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2718,7 +2786,7 @@
                   "name": "_productId",
                   "nameLocation": "1538:10:6",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3400,
+                  "scope": 3404,
                   "src": "1533:15:6",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2747,19 +2815,19 @@
               "parameters": [],
               "src": "1585:0:6"
             },
-            "scope": 3401,
-            "src": "1494:570:6",
+            "scope": 3405,
+            "src": "1494:579:6",
             "stateMutability": "payable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 3402,
-        "src": "384:1689:6",
+        "scope": 3406,
+        "src": "384:1698:6",
         "usedErrors": []
       }
     ],
-    "src": "37:2036:6"
+    "src": "37:2045:6"
   },
   "compiler": {
     "name": "solc",
@@ -2767,7 +2835,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-12-13T05:05:16.325Z",
+  "updatedAt": "2023-12-21T13:35:02.654Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

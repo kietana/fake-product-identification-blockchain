@@ -4,6 +4,8 @@ import ProductManagement from './contracts/ProductManagement.json'
 import Manufacturer from './contracts/Manufacturer.json'
 import Seller from './contracts/Seller.json'
 import Consumer from './contracts/Consumer.json'
+import Navbar from './components/Navbar/Navbar'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 function App() {
 
@@ -390,7 +392,16 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div>
+      <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Home/>}/>
+     
+      <Navbar/>
+      
+
+
       <p>Total Product = { totalProduct } </p>
       <p>Current metamask account = { currentAcc } </p>
 
@@ -506,6 +517,7 @@ function App() {
             <p>Owner: {ownerInfo}</p>
           </div>
           )}
+           </BrowserRouter>
         </div>
       )}
 
@@ -608,8 +620,8 @@ function App() {
         onChange = {(e) => setConsumerBuyPId(e.target.value)}>
       </input> <br></br>
       <button onClick = {consumerBuy}> Buy </button>
-
-
+      </Routes>
+      </BrowserRouter>
     </div>
   );
 }
