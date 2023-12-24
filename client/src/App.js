@@ -6,6 +6,11 @@ import Seller from './contracts/Seller.json'
 import Consumer from './contracts/Consumer.json'
 import Navbar from './components/Navbar/Navbar'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Home from './pages/Home'
+import HomeCategory from './pages/HomeCategory'
+import Product from './pages/Product'
+import Cart from './pages/Cart'
+import LoginSignup from './pages/LoginSignup'
 
 function App() {
 
@@ -394,13 +399,22 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/' element={<Home/>}/>
-     
       <Navbar/>
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          <Route path='/Product' element={<HomeCategory category="Product"/>}/>
+          <Route path='/Verify' element={<HomeCategory category="Verify"/>}/>
+          <Route path='/About' element={<HomeCategory category="About"/>}/>
+          <Route path='/Contact' element={<HomeCategory category="Contact"/>}/>
+          <Route path="/product" element={<Product/>}>
+            <Route path=':productId' element={<Product/>}/>
+          </Route>
+          <Route path='/cart' element={<Cart/>}/>
+          <Route path='/login' element={<LoginSignup/>}/>
       
-
+      
+        </Routes>
+      </BrowserRouter>
 
       <p>Total Product = { totalProduct } </p>
       <p>Current metamask account = { currentAcc } </p>
@@ -517,7 +531,6 @@ function App() {
             <p>Owner: {ownerInfo}</p>
           </div>
           )}
-           </BrowserRouter>
         </div>
       )}
 
@@ -620,8 +633,6 @@ function App() {
         onChange = {(e) => setConsumerBuyPId(e.target.value)}>
       </input> <br></br>
       <button onClick = {consumerBuy}> Buy </button>
-      </Routes>
-      </BrowserRouter>
     </div>
   );
 }
