@@ -1,0 +1,44 @@
+.flex-container {
+    display: flex;
+    height: 600px;
+    width: 93%;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: -200px;
+
+ }
+ .flex-item {
+    flex-basis: 100%;
+    width: 80px;
+    text-align: left;
+    letter-spacing: 1px;
+    align-items: left;
+    justify-content: left;
+ }
+
+ button {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #5780a4;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px #999;
+  }
+  
+button:hover {
+    background-color: #bec3c6;
+    color: black}
+  
+button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}

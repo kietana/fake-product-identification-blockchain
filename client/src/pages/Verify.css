@@ -1,0 +1,19 @@
+.flex-containers{
+    display: flex;
+    height: 400px;
+    width: 93%;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 370px;
+
+ }
+ .flex-items{
+    flex-basis: 100%;
+    width: 10px;
+    text-align: left;
+    letter-spacing: 1px;
+    align-items: left;
+    justify-content: left;
+ }

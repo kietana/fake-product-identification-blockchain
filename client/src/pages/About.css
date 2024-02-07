@@ -1,4 +1,4 @@
-.hero-container{
+.about-container{
     display: flex;
     height: 400px;
     width: 100%;
@@ -8,7 +8,7 @@
     margin-top: 160px;
 }
 
-.hero-item {
+.about-item {
     flex-basis: 500%;
     width: 400px;
     text-align: left;
@@ -18,7 +18,7 @@
     margin-top: -100px;
 }
 
-.hero-item img {
+.about-item img {
     width: 330px;
     height: 270px;
 }

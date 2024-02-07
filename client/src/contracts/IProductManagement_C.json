@@ -83,7 +83,7 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.13;\r\n\r\ninterface IProductManagement_C {\r\n    function getProductData(uint _productId) external view returns (string memory _name, string memory _size, string memory _origin, uint _price, address payable _owner, uint year, uint month, uint date);\r\n    function changeProductOwner(uint _productId, address _new) external;\r\n}\r\n\r\ncontract Consumer {\r\n\r\n    IProductManagement_C productManageContract;\r\n\r\n    mapping (address => bool) public isConsumer;\r\n    mapping (address => uint) private balance; // id => balance mapping to keep track of each consumer topped up balance\r\n\r\n    constructor (address _productManageAddress) {\r\n        productManageContract = IProductManagement_C(_productManageAddress);\r\n    }\r\n\r\n    fallback() external payable {\r\n\r\n    }\r\n\r\n    receive() external payable { \r\n        \r\n    }\r\n\r\n    modifier onlyConsumer(address _addr) {\r\n        require(isConsumer[_addr]);\r\n        _;\r\n    }\r\n\r\n    function registerConsumer(address _addr) public {\r\n        isConsumer[_addr] = true;\r\n    }\r\n\r\n    function topUp (address _addr) public payable onlyConsumer(_addr) {\r\n        require(msg.value > 0 ether);\r\n        (bool sent,) = payable(address(this)).call{value: msg.value}(\"\");\r\n        require(sent, \"Fail to top up amount.\");\r\n\r\n        balance[_addr] += msg.value;\r\n    }\r\n\r\n    function checkBalance (address _addr) public view onlyConsumer(_addr) returns (uint) {\r\n        return balance[_addr];\r\n    }\r\n\r\n    function buyFromSeller (address _addr, uint _productId) public payable onlyConsumer(_addr) {\r\n        uint price;\r\n        address payable _to; // product owner that we want to pay eth to\r\n\r\n        (,,, price, _to,,,) = productManageContract.getProductData(_productId);\r\n        \r\n        require(balance[_addr] >= price, \"Balance not enough\");\r\n\r\n        (bool sent, ) = _to.call{value: price * 10**18}(\"\");\r\n        require(sent, \"Failed to send Ether\");\r\n\r\n        balance[_addr] -= price * 10**18;\r\n        productManageContract.changeProductOwner(_productId, _addr);\r\n    }\r\n    \r\n}",
-  "sourcePath": "C:\\Users\\User\\Desktop\\fake-product-blockchain - Copy\\contracts\\consumer.sol",
+  "sourcePath": "C:\\Users\\User\\Desktop\\fake-product-identification-blockchain\\contracts\\consumer.sol",
   "ast": {
     "absolutePath": "project:/contracts/consumer.sol",
     "exportedSymbols": {
@@ -2835,7 +2835,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-12-24T06:20:55.258Z",
+  "updatedAt": "2023-12-26T03:48:01.518Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

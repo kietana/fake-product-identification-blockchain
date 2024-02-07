@@ -86,7 +86,7 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: GPL-3.0\r\npragma solidity ^0.8.13;\r\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\r\n\r\ninterface IProductManagement {\r\n    function makeProduct(string memory _name, string memory _size, string memory _origin, uint _price, address _newOwner) external;\r\n    function registerSeller(string memory _sellerId, string memory _shopName, address _sellerAddr) external;\r\n    function showSerialNumber (uint _productId) external view returns (uint);\r\n}\r\n\r\ncontract Manufacturer is Ownable {\r\n\r\n    IProductManagement productManageContract;\r\n\r\n    constructor (address _productManageAddress, address initOwner) Ownable(initOwner) {\r\n        productManageContract = IProductManagement(_productManageAddress);\r\n    }\r\n\r\n    function addProduct (string memory _name, string memory _size, string memory _origin, uint _price) public onlyOwner {\r\n        productManageContract.makeProduct(_name, _size, _origin, _price, msg.sender);\r\n    }\r\n\r\n    function addSeller (string memory _sellerId, string memory _shopName, address _sellerAddr) public onlyOwner {\r\n        productManageContract.registerSeller(_sellerId, _shopName, _sellerAddr);\r\n    }\r\n\r\n    function showSN(uint _productId) public view returns (uint) {\r\n        return productManageContract.showSerialNumber(_productId);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\User\\Desktop\\fake-product-blockchain - Copy\\contracts\\manufacturer.sol",
+  "sourcePath": "C:\\Users\\User\\Desktop\\fake-product-identification-blockchain\\contracts\\manufacturer.sol",
   "ast": {
     "absolutePath": "project:/contracts/manufacturer.sol",
     "exportedSymbols": {
@@ -1478,7 +1478,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-12-24T06:20:55.264Z",
+  "updatedAt": "2023-12-26T03:48:01.520Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
